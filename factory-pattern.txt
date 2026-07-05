@@ -1,0 +1,34 @@
+A factory is a helper that makes the right kind of object for you so you don't have to decide which one to create.
+
+interface Notification() {
+    send();
+}
+
+class EmailNotification implements Notification() {
+    public void send() {
+        System.out.println("This is email notification");
+    }
+}
+
+class SMSNotification implements Notification() {
+    public void send() {
+        System.out.println("This is sms notification");
+    }
+}
+
+class NotificationFactory() {
+    private notifcationfactory() {};
+    public static Notification create(String type) {
+        switch(type) {
+            case: "email"
+            return new EmailNotification();
+
+            case: "sms"
+            return new SMSNotification();
+        }
+    }
+}
+
+//usage
+Notification notif = NotificationFactory.create("email");
+notif.send("Hello");

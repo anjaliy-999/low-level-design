@@ -1,0 +1,111 @@
+Delivery Framework
+
+1. Requirements
+When defining requirements, keep in mind
+ - Primary Capabilities
+ - Rules and completion
+ - Error handling
+ - Scope boundaries
+
+ * Two players alternately place X or O on a 3X3 grid
+ * A player wind by completing row, col, either diagonal
+ * Game ends in draw if all nine cells are filled with no winner
+ * Invalid moves should be rejected (can place only on empty cells, player can play only when game is in progress)
+ * System should provide a way to query current game state and reset the game
+
+ 2. Entities and Relationship
+ Identifying Entities -
+ Start by scanning requirements and pull out meaningful nouns
+ If something changes state or enforces rules, it should be entity
+
+ Define Relationships -
+ think how entities interact.
+ * Which entity is orchestrator (drive the flow)
+ * Which entity owns state
+ * how do entities depend on each other
+ * where should specific rules logically live
+
+ Entities
+ Game
+ Board
+ Player
+
+ Enums
+ GameState
+ Symbol
+
+ Relationships
+ Game - > Board (composition)
+ Game -> Player (aggregation)
+
+ Association if game does not store the player, just uses it - that means player is passed in one of its methods
+ class Game {
+     public void makeMove(Player player, int row, int col) {
+         ...
+     }
+ }
+
+ Aggregation if game stores Players, but both exist independently. Destroying Game object does not destroy Player object
+ class Game {
+     private List<Player> players;
+ }
+
+ Composition if game owns the board. Destroying Game object also destroys Board object
+ class Board {
+     private Cell[][] cells = new Cell[3][3];
+ }
+
+ 3. Class Design
+ Go top-down, entity by entity
+ Game -> board, player -> symbol
+
+ For each entity derive
+ * State - What does this class need to remember to enforce the requirements?
+ * Behavior - What does this class need to do, in terms of operations or queries?
+
+ Deriving state from requirements
+     - Two players alternately place X or O on a 3X3 grid -
+     Game
+        board
+        player_x
+        player_o
+
+     - Game ends when a player wins or board is full
+     Game
+         board
+         player_x
+         player_o
+         current_player
+         gameState
+
+     GameState
+        In_Progress
+        Winner_X
+        Winner_O
+        Draw
+
+ Deriving behavior from requirements
+     Game :
+     Check game state - getGameState() -> GameStatus
+     Players need to make moves - makeMove(row, col) -> bool
+     Players should make alternate moves - switchTurn() -> void
+     player wins if any row/col/diagonal is filled - checkWinner() -> bool // winning is a game rule and board should not know about it plus it updates gamestatus so this method should be inside game
+     game draws if board is full - checkDraw() -> bool
+     Ask whose turn it is - getCurrentPlayer() -> Player
+     Check who won - getWinner() -> Player | null
+     Inspect the board - getBoard() -> Board
+
+     Board :
+     reject invalid moves - isValidMove(row, col) -> bool
+     place symbol - placeSymbol(row, col, symbol) -> void
+
+4. Key Design patterns
+Singleton pattern - TicTacToe game
+State pattern - GameState
+Strategy pattern - player is AI or human
+Factory pattern - creation of players
+Observer pattern for game event tracking - eg. scoreboard should be notified whenever a game is won / draw etc
+
+5. Implementation
+
+6. Walk through a main stream scenario

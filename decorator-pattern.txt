@@ -1,0 +1,70 @@
+Adds behavior to an object without changing its class.
+Use it when you need to layer on extra functionality at runtime.
+
+public interface Coffee {
+    String getDescription();
+    double getCost();
+}
+
+public class Espresso implements Coffee {
+    public String getDescription() {
+        return "Espresso";
+    }
+
+    public double getCost() {
+        return 2.00;
+    }
+}
+
+public class Cappuccino implements Coffee {
+    public String getDescription() {
+        return "Cappuccino";
+    }
+
+    public double getCost() {
+        return 2.00;
+    }
+}
+
+public abstract class CoffeeDecorator {
+    private Coffee coffee;
+
+    public MilkDecorator(Coffee coffee) {
+        this.coffee = coffee;
+    }
+}
+
+// decorator class has-a and is-a Coffee
+public class MilkDecorator implements Coffee {
+    private Coffee coffee;
+
+    public MilkDecorator(Coffee coffee) {
+        this.coffee = coffee;
+    }
+
+    public String getDescription() {
+           return coffee.getDescription() + "Milk"";
+    }
+
+    public double getCost() {
+        return coffee.getCost() + 1.00;
+    }
+}
+
+// decorator class has-a and is-a Coffee
+public class OatMilkDecorator implements Coffee{
+    private Coffee coffee;
+
+    public OatMilkDecorator(Coffee coffee) {
+        this.coffee = coffee;
+    }
+
+    public String getDescription() {
+           return coffee.getDescription() + "Oat Milk"";
+    }
+
+    public double getCost() {
+        return coffee.getCost() + 1.50;
+    }
+}
+

@@ -1,0 +1,45 @@
+A builder is a helper that lets you create a complex object step by step without worrying about the order or messy construction details.
+It's used when an object has many optional parts or configuration choices.
+
+public class HttpRequest {
+    private String url;
+    private String method;
+    private Map<String, String> headers;
+
+    //  above fields are optional and creating constructor for each combination is messy
+    private HttpRequest() {};
+
+    public static class Builder {
+        private HttpRequest request = new HttpRequest();
+
+        public HttpRequest build() {
+            // validate required fields
+            if(request.url == null) throw new IllegalStateException();
+            return request;
+        }
+
+        public Builder url(String url) {
+            this.request.url = url;
+            return this;
+        }
+
+        public Builder method(String method) {
+            this.request.method = method;
+            return this;
+        }
+
+        public Builder headers(Map<String, String> headers) {
+            this.request.headers = headers;
+            return this;
+        }
+    }
+}
+
+Common runtime exceptions
+    NullPointerException
+    IllegalArgumentException
+    IllegalStateException
+    ArrayIndexOutOfBoundsException
+    ArithmeticException
+    ClassCastException
+    NumberFormatException

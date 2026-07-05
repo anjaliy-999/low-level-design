@@ -1,0 +1,21 @@
+Singleton ensures only one instance of a class exists.
+like a configuration manager, connection pool, or logger.
+
+public class Logger {
+    private static Logger instance; // A singleton has one instance for the entire class, not one instance per object. static makes it belong to the class.
+    private Logger() {};
+
+    public static Logger getInstance {
+        if(instance == null) {
+            instance = new Logger();
+        }
+        return instance;
+    }
+
+    public void log() {
+        // business logic
+    }
+}
+
+Logger logger = new Logger.getInstance();
+logger.log("hello");
